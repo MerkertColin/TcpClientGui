@@ -10,61 +10,61 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TcpClientController">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-         <children>
-            <TabPane prefHeight="400.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab fx:id="tabClient" text="Client">
-                     <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="480" prefWidth="640" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TcpClientController">
+   <children>
+      <TabPane prefHeight="400.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <tabs>
+            <Tab fx:id="tabClient" text="Client">
+               <content>
+                  <AnchorPane prefHeight="355.0" prefWidth="640.0">
+                     <children>
+                        <VBox layoutX="6.0" prefHeight="368.0" prefWidth="628.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <VBox layoutX="6.0" prefHeight="372.0" prefWidth="640.0">
+                              <HBox prefHeight="32.0" prefWidth="640.0">
                                  <children>
-                                    <HBox prefHeight="32.0" prefWidth="640.0">
+                                    <VBox prefHeight="42.0" prefWidth="174.0">
                                        <children>
-                                          <VBox prefHeight="42.0" prefWidth="174.0">
-                                             <children>
-                                                <Label text="IP" />
-                                                <TextField fx:id="tfIP" prefHeight="25.0" prefWidth="183.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="10.0">
-                                             <children>
-                                                <Label prefHeight="25.0" prefWidth="3.0" text=":" />
-                                             </children>
-                                          </VBox>
-                                          <VBox prefHeight="42.0" prefWidth="73.0">
-                                             <children>
-                                                <Label text="Port" />
-                                                <TextField fx:id="tfPort" prefHeight="25.0" prefWidth="68.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                             <children>
-                                                <Button fx:id="btnConnect" mnemonicParsing="false" onAction="#OnConnectClick" prefHeight="25.0" prefWidth="83.0" text="Connect" />
-                                             </children>
-                                          </VBox>
+                                          <Label text="Address" />
+                                          <TextField fx:id="tfAddress" prefHeight="25.0" prefWidth="183.0" />
                                        </children>
-                                    </HBox>
-                                    <TextArea fx:id="taMessageArea" editable="false" prefHeight="299.0" prefWidth="640.0" />
-                                    <HBox prefHeight="23.0" prefWidth="640.0">
+                                    </VBox>
+                                    <VBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="10.0">
                                        <children>
-                                          <Label contentDisplay="CENTER" prefHeight="25.0" prefWidth="58.0" text="Message: " />
-                                          <TextField fx:id="tfMessage" prefHeight="25.0" prefWidth="499.0" />
-                                          <Button fx:id="btnSendMsg" onAction="#OnSendMessageClick" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Send Msg" />
+                                          <Label prefHeight="25.0" prefWidth="3.0" text=":" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="42.0" prefWidth="73.0">
+                                       <children>
+                                          <Label text="Port" />
+                                          <TextField fx:id="tfPort" prefHeight="25.0" prefWidth="68.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Button fx:id="btnConnect" mnemonicParsing="false" onAction="#OnConnectClick" prefHeight="25.0" prefWidth="83.0" text="Connect" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <AnchorPane prefHeight="386.0" prefWidth="628.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <TextArea fx:id="taMessageArea" editable="false" layoutY="7.0" prefHeight="288.0" prefWidth="628.0" wrapText="true" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0" />
+                                    <HBox prefHeight="25.0" prefWidth="630.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <children>
+                                          <Label contentDisplay="CENTER" prefHeight="25.0" prefWidth="58.0" HBox.hgrow="NEVER" text="Message: " />
+                                          <TextField fx:id="tfMessage" prefWidth="499.0" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="btnSendMsg" mnemonicParsing="false" onAction="#OnSendMessageClick"  HBox.hgrow="NEVER" prefHeight="25.0" prefWidth="79.0" text="Send Msg" />
                                        </children>
                                     </HBox>
                                  </children>
-                              </VBox>
+                              </AnchorPane>
                            </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-              </tabs>
-            </TabPane>
-         </children>
-    </AnchorPane>
-  </children>
-</VBox>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

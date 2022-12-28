@@ -2,15 +2,19 @@ package controller;
 
 import client.TcpClient;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TcpClientController  {
     @FXML
     private Button btnConnect;
     @FXML
-    private TextField tfIP;
+    private TextField tfAddress;
     @FXML
     private TextField tfPort;
     @FXML
@@ -18,7 +22,7 @@ public class TcpClientController  {
     @FXML
     private TextField tfMessage;
 
-    private TcpClient m_tcpClient;
+    private final TcpClient m_tcpClient;
 
     public TcpClientController()
     {
@@ -28,34 +32,73 @@ public class TcpClientController  {
     @FXML
     private void OnConnectClick()
     {
-        String sIp = tfIP.getText();
-        String sPort = tfPort.getText();
-
         if ( m_tcpClient.isConnected() )
         {
-            m_tcpClient.disconnect();
-            btnConnect.setText("Connect");
-            tfIP.setEditable(true);
-            tfPort.setEditable(true);
+            disconnect();
         }
         else
         {
-            m_tcpClient.connect( sIp, Integer.parseInt( sPort ) );
-            btnConnect.setText("Disconnect");
-            tfIP.setEditable(false);
-            tfPort.setEditable(false);
+            tryConnect();
         }
+    }
+
+    private void disconnect()
+    {
+        updateMessageArea("Disconnecting...");
+        m_tcpClient.disconnect();
+        updateMessageArea( "Disconnect: Successful\n");
+        btnConnect.setText("Connect");
+    }
+    private void tryConnect( )
+    {
+        boolean wasConnectionSuccessful;
+        String sAddress = tfAddress.getText();
+        String sPort = tfPort.getText();
+
+        updateMessageArea("Connecting...");
+        wasConnectionSuccessful = m_tcpClient.connect( sAddress, sPort );
+        if ( wasConnectionSuccessful )
+        {
+            btnConnect.setText("Disconnect");
+            updateMessageArea( "Connection: Successful");
+        }
+        else
+        {
+            updateMessageArea( "Connection: Failed\n");
+            showErrorAlert( "Connecting failed", "Connecting failed" );
+        }
+    }
+    private void showErrorAlert( String title, String message )
+    {
+        Alert alert = new Alert( Alert.AlertType.ERROR);
+        alert.setTitle( title );
+        alert.setContentText( message );
+        alert.show();
     }
 
     @FXML
     private void OnSendMessageClick()
     {
         String sMessage = tfMessage.getText();
-        StringBuilder sb = new StringBuilder("");
-        sb.append( taMessageArea.getText() );
         m_tcpClient.sendMessage( sMessage );
-        sb.append( "Sent: " + sMessage + "\n" );
+        updateMessageArea( "Sent: " + sMessage );
+        getResponse();
+    }
+
+    private void updateMessageArea( String message )
+    {
+        StringBuilder sb = new StringBuilder( "" );
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern( "HH:mm:ss" );
+        LocalTime t = LocalTime.now();
+        String timestamp = dtf.format( t ) + " >> ";
+        sb.append( taMessageArea.getText() );
+        sb.append( timestamp + message +  "\n" );
         taMessageArea.setText( sb.toString() );
     }
 
+    private void getResponse()
+    {
+        String res = m_tcpClient.readResponse();
+        updateMessageArea( "Response: " + res );
+    }
 }

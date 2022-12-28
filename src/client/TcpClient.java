@@ -1,9 +1,6 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.InetSocketAddress;
@@ -14,23 +11,40 @@ public class TcpClient {
     public TcpClient() {
     }
 
-    public void connect( String hostname, int port )
+    /**
+     * connects to a socket
+     * @param hostname address of the target
+     * @param port port of the target
+     * @return boolean if connection was successful
+     */
+    public boolean connect( String hostname, String port )
     {
-        SocketAddress address = new InetSocketAddress(hostname, port);
-        m_clientSocket = new Socket();
-        try
-        {
-            m_clientSocket.connect( address );
-        } catch ( Exception e )
-        {
-            System.out.println( "Connection Failed" );
-            System.out.println( e.getMessage() );
-        };
+        boolean isSuccessfulConnection;
+        boolean wasValidationSuccessful;
+        SocketAddress address;
 
-        if ( m_clientSocket.isConnected() )
+        AddressInfo addrInfo = new AddressInfo( hostname, port );
+        wasValidationSuccessful = addrInfo.validate();
+        if ( !wasValidationSuccessful )
         {
-            System.out.println( "Connection Successful");
+            isSuccessfulConnection = false;
         }
+        else
+        {
+            m_clientSocket = new Socket();
+            address = addrInfo.getSocketAddress();
+            try
+            {
+                m_clientSocket.connect( address );
+            } catch ( Exception e )
+            {
+                System.out.println( e.getMessage() );
+            };
+
+            isSuccessfulConnection = m_clientSocket.isConnected();
+        }
+
+        return isSuccessfulConnection;
     }
     public boolean isConnected()
     {
@@ -84,26 +98,28 @@ public class TcpClient {
             return null;
         }
 
-        BufferedReader reader;
+        BufferedInputStream bufInStream;
         InputStream instream;
-        String sResponseMessage = "";
-        String sLine;
+        StringBuilder sb = new StringBuilder( "" );
+        String sLine = "";
+        int len;
         try
         {
             instream = m_clientSocket.getInputStream();
-            reader = new BufferedReader( new InputStreamReader( instream ) );
-            while ( (sLine = reader.readLine()) != null )
+            bufInStream = new BufferedInputStream( instream  );
+            len = bufInStream.available();
+            if ( len > 0 )
             {
-                sResponseMessage += sLine;
+                byte[] byteData = new byte[len];
+                bufInStream.read( byteData );
+                sb.append( new String(byteData) );
             }
-
         }
         catch ( Exception e )
         {
-            sResponseMessage = null;
             System.out.println( "Receiving Message failed" );
             System.out.println( e.getMessage() );
         }
-        return sResponseMessage;
+        return sb.toString();
     }
 }
